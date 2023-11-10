@@ -119,19 +119,20 @@ def formatar(lista_de_midias):
 def copiar(lista):
     global copiar_de
     global erro_critico
+    global opcao
 
     for midia in lista:
         result = subprocess.run("robocopy " + str(copiar_de) + " " + midia + ":", shell=True,
                                 stdout=subprocess.DEVNULL,
                                 stderr=subprocess.STDOUT)
         if str(result.returncode) == "1":
-            print(f"{BColors.OKBLUE}Os arquivos foram copiados com sucesso para: " + midia + "." + BColors.ENDC)
+            print(f"{BColors.OKBLUE}\nOs arquivos foram copiados com sucesso para: " + midia + "." + BColors.ENDC)
         if str(result.returncode) == "2":
-            print(f"{BColors.OKBLUE}Os arquivos foram copiados com sucesso para: " + midia + "." + BColors.ENDC)
+            print(f"{BColors.OKBLUE}\nOs arquivos foram copiados com sucesso para: " + midia + "." + BColors.ENDC)
         if str(result.returncode) == "3":
-            print(f"{BColors.OKBLUE}Os arquivos foram copiados com sucesso para: " + midia + "." + BColors.ENDC)
+            print(f"{BColors.OKBLUE}\nOs arquivos foram copiados com sucesso para: " + midia + "." + BColors.ENDC)
         else:
-            print(f"{BColors.FAIL}Ocorreu um erro ao copiar arquivos para: " + midia + "." + BColors.ENDC)
+            print(f"{BColors.FAIL}\nOcorreu um erro ao copiar arquivos para: " + midia + "." + BColors.ENDC)
             erro_critico = True
 
         dir = []
@@ -141,7 +142,10 @@ def copiar(lista):
                 if os.path.isfile(os.path.join(midia + ":/", file)):
                     dir.append(file)
 
-        print(f"{BColors.WARNING}Um total de " + str(len(dir)) + " arquivos foram copiados.\n" + BColors.ENDC)
+        print(f"{BColors.WARNING}Um total de " + str(len(dir)) + " arquivos foram copiados." + BColors.ENDC)
+
+        if opcao == "4":
+            subprocess_formatar(midia)
 
 
 def listar_dispositivos():
@@ -174,7 +178,8 @@ def selecionar_modo():
     opcao = input('Digite "1" para copiar arquivos para as Mídias.'
                   '\nDigite "2" para formatar as Mídias.'
                   '\nDigite "3" para formatar um Flash Memory Card.'
-                  '\nDigite "4" para ligar/desligar som.\n\nOpção: ')
+                  '\nDigite "4" para testar Copia e Formatação de Mídias.'
+                  '\nDigite "5" para ligar/desligar som.\n\nOpção: ')
 
     subprocess.run("cls", shell=True)
 
@@ -191,6 +196,9 @@ def selecionar_modo():
         subprocess.run("cls", shell=True)
         excluir_unidades()
     if opcao == "4":
+        drivetype = "2"
+        tipo_formatacao()
+    if opcao == "5":
         ligar_som()
     else:
         selecionar_modo()
@@ -242,6 +250,9 @@ def numero_de_midias():
             print(f"{BColors.FAIL}Apenas números inteiros são permitidos.\n" + BColors.ENDC)
             numero_de_midias()
         if opcao == "1":
+            subprocess.run("cls", shell=True)
+            diretorio_copia()
+        if opcao == "4":
             subprocess.run("cls", shell=True)
             diretorio_copia()
         if opcao == "2":
@@ -324,7 +335,7 @@ def copiar_para_midias():
 
     if len(lista_de_dispositivos) > 0:
 
-        print(f"{BColors.WARNING}\nIniciando copia. Não remova as Mídias durante o processo...\n" + BColors.ENDC)
+        print(f"{BColors.WARNING}\nIniciando copia. Não remova as Mídias durante o processo..." + BColors.ENDC)
 
         copiar(lista_de_dispositivos)
 
@@ -335,7 +346,7 @@ def copiar_para_midias():
     else:
         print(f"{BColors.FAIL}\nNão foi possível copiar os arquivos para as Mídias.\n" + BColors.ENDC)
 
-    print(f"{BColors.OKGREEN}Operação concluída." + BColors.ENDC)
+    print(f"{BColors.OKGREEN}\nOperação concluída." + BColors.ENDC)
     print(f"{BColors.OKGREEN}\nRemova todas as Mídias das portas USBs." + BColors.ENDC)
     print(f'{BColors.OKGREEN}\nSegure "K" para copiar novamente.' + BColors.ENDC)
     print(f'{BColors.OKGREEN}\nSegure "ESC" para voltar ao Menu Inicial.' + BColors.ENDC)
